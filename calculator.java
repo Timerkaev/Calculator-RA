@@ -12,20 +12,26 @@ public class calculator {
         System.out.println("Введите необходимое действие с числами от 1 до 10, числа могут быть римскими: ");
         String input = scanner.nextLine();
         char[] sim = new char[10];
+        int isklop = 0;
         for (int i = 0; i < input.length(); i++) {
             sim[i] = input.charAt(i);
             if (sim[i] == '+') {
                 operation = '+';
+                isklop++;
             }
             if (sim[i] == '-') {
                 operation = '-';
+                isklop++;
             }
             if (sim[i] == '*') {
                 operation = '*';
+                isklop++;
             }
             if (sim[i] == '/') {
                 operation = '/';
+                isklop++;
             } 
+            if(isklop > 1) throw new IllegalArgumentException("Можно вводить только 2 числа, напримеи 1+1 или I+I");
         }
         String opString = String.valueOf(sim);
         String[] unit = opString.split("[+-/*]");
@@ -39,16 +45,14 @@ public class calculator {
         } else {
             result = calculation(a, b, operation);
             String resultRoman = arabToRom(result);
-            System.out.println("Результат: " + resultRoman);
+            System.out.println("Результат: " +resultRoman);
         }
         try {
         a = Integer.parseInt(str1);
         b = Integer.parseInt(str3);
         result = calculation(a, b, operation);
         System.out.println("Результат: " + result);
-        } catch (Exception e){
-        	String exe = "Данная операция невозможна";
-        	throw new Exception(exe);
+        } catch (NumberFormatException e){
         }
     }
 
@@ -89,8 +93,11 @@ public class calculator {
         return -1;
     }
 
-    public static int calculation (int a, int b, char op) {
+    public static int calculation (int a, int b, char op) throws Exception{
         int result = 0;
+        if(a < 1 || a > 10 || b < 1 || b > 10) {
+        	throw new Exception("Значения не должны быть меньше 1 или больше 10!");
+        } else
         try {
         switch (op) {
             case '+'-> result = a + b;
